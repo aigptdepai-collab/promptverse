@@ -280,18 +280,15 @@ async function loadPublicData(){
  const catList=Array.isArray(catData)?catData:(catData.categories||[]);
  const promptList=Array.isArray(promptData)?promptData:(promptData.prompts||[]);
 
- const categoryMap={};
- catList.forEach(c=>categoryMap[c.id]=c.name);
-
  categories=["همه",...catList.map(c=>c.name),"علاقه‌مندی‌ها"];
 
- items=promptList.map(p=>({
+items=promptList.map(p=>({
  id:p.id,
  title:p.title,
- category:categoryMap[p.category_id]||"بدون دسته‌بندی",
- image:p.image_url||"",
- prompt:p.prompt_text||""
- }));
+ category:p.category||"بدون دسته‌بندی",
+ image:p.image||"",
+ prompt:p.prompt||""
+}));
 
  renderFilters();
  render();
