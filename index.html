@@ -1,0 +1,191 @@
+
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#100d1d">
+<title>PROMPTVERSE | دنیای پرامپت‌ها</title>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#100d1d;color:#f8f4ff;font-family:Vazirmatn,sans-serif}
+header{padding:20px 6%;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #302442}
+.logo{font-size:22px;font-weight:900;direction:ltr}
+.logo span{color:#b58aff}
+.tag{font-size:12px;color:#cbb6f4;background:#241b36;padding:9px 14px;border-radius:30px}
+.hero{text-align:center;padding:75px 18px 45px;background:radial-gradient(ellipse at top,#392052,transparent 70%)}
+.hero small{color:#c5a4ff}
+.hero h1{font-size:clamp(32px,7vw,58px);margin:18px 0}
+.hero h1 span{color:#c49aff}
+.hero p{color:#aaa0bd;line-height:2;max-width:580px;margin:auto}
+.search{display:block;width:min(550px,100%);margin:28px auto 0;padding:16px 20px;border-radius:14px;border:1px solid #403052;background:#1c1728;color:white;font:inherit;outline:none}
+.search:focus{border-color:#b58aff}
+.container{width:min(1100px,90%);margin:auto}
+.heading{display:flex;justify-content:space-between;align-items:center;margin:35px 0 16px}
+.heading h2{font-size:21px}
+.heading small{color:#a89bb9}
+.filters{display:flex;gap:9px;overflow:auto;padding:5px 0 18px}
+.filters button{white-space:nowrap;background:#1c1728;color:#c8bdd8;border:1px solid #382b49;padding:10px 17px;border-radius:30px;font:inherit;cursor:pointer}
+.filters button.active,.filters button:hover{background:#8e5be0;color:white;border-color:#8e5be0}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;padding-bottom:65px}
+.card{background:#1b1627;border:1px solid #342741;border-radius:19px;overflow:hidden;transition:.2s}
+.card:hover{transform:translateY(-5px);border-color:#9668ce}
+.art{height:190px;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;background:radial-gradient(circle at 50% 35%,#a36bc0,#49305f 55%,#21182f)}
+.art:before{content:"";width:112px;height:145px;border-radius:48% 48% 38% 38%;background:linear-gradient(140deg,#f0c3b1,#9b657b 65%,#38243d);box-shadow:0 0 55px #d9a1ff55}
+.art:after{content:"";position:absolute;bottom:-55px;width:190px;height:120px;border-radius:50% 50% 0 0;background:#30213f}
+.art.b{background:radial-gradient(circle at 50%,#a06c70,#472d46 60%,#21182f)}
+.art.c{background:radial-gradient(circle at 50%,#7180a8,#303655 60%,#21182f)}
+.art.d{background:radial-gradient(circle at 50%,#a98755,#483622 60%,#21182f)}
+.art.e{background:radial-gradient(circle at 50%,#a46f9b,#472c55 60%,#21182f)}
+.art.f{background:radial-gradient(circle at 50%,#57918a,#24474b 60%,#21182f)}
+.category{position:absolute;z-index:2;bottom:12px;right:13px;background:#171020cc;border:1px solid #ffffff30;border-radius:20px;padding:5px 12px;font-size:11px}
+.info{padding:17px}
+.cardtop{display:flex;justify-content:space-between;align-items:center}
+.card h3{font-size:16px;margin:0}
+.heart{background:none;border:0;color:#a99ab9;font-size:23px;cursor:pointer}
+.heart.saved{color:#ff83c5}
+.info p{font-size:12px;color:#aaa0bd;line-height:2;min-height:45px}
+.actions{display:flex;gap:8px}
+.actions button{padding:10px;border:0;border-radius:10px;font:inherit;font-size:12px;cursor:pointer}
+.copy{background:linear-gradient(100deg,#8e5be0,#c28bfa);color:white;flex:1}
+.show{background:#30243f;color:#e7d8ff}
+.empty{grid-column:1/-1;text-align:center;color:#aaa;padding:40px}
+footer{text-align:center;border-top:1px solid #302442;padding:25px;color:#8e829e;font-size:12px}
+.modal{display:none;position:fixed;inset:0;background:#080610dd;z-index:10;align-items:center;justify-content:center;padding:18px}
+.modal.open{display:flex}
+.modalbox{background:#211a30;border:1px solid #59416f;border-radius:20px;padding:23px;width:min(550px,100%);max-height:85vh;overflow:auto}
+.modalbox h3{margin-top:0}
+.modalbox p{color:#ddd2eb;line-height:2;direction:ltr;text-align:left;overflow-wrap:anywhere;font-size:13px}
+.modalbuttons{display:flex;gap:10px}
+.modalbuttons button{padding:11px;border:0;border-radius:10px;font:inherit;cursor:pointer}
+.close{background:#3a2d4d;color:white}
+.modalcopy{background:#a77ae5;color:white;flex:1}
+@media(max-width:750px){.grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:520px){.grid{grid-template-columns:1fr}.hero{padding-top:55px}.art{height:210px}}
+</style>
+</head>
+<body>
+<header>
+  <div class="logo">PROMPT<span>VERSE</span></div>
+  <div class="tag">کتابخانه پرامپت فارسی ✦</div>
+</header>
+
+<section class="hero">
+  <small>✦ دنیای ایده‌های بی‌انتها ✦</small>
+  <h1>تصویر ذهنی‌ات را <span>خلق کن</span></h1>
+  <p>پرامپت‌های خلاقانه برای ساخت تصاویر خاص، پرتره‌های جذاب و استایل‌های متفاوت را کشف کن.</p>
+  <input class="search" id="search" placeholder="جستجو بین پرامپت‌ها...">
+</section>
+
+<main class="container">
+  <div class="heading">
+    <h2>گالری پرامپت‌ها</h2>
+    <small id="count"></small>
+  </div>
+
+  <nav class="filters">
+    <button class="active" data-filter="همه">همه</button>
+    <button data-filter="پرتره">پرتره</button>
+    <button data-filter="استایل">استایل</button>
+    <button data-filter="پوشاک">پوشاک</button>
+    <button data-filter="علاقه‌مندی">♡ علاقه‌مندی‌ها</button>
+  </nav>
+
+  <section class="grid" id="grid"></section>
+</main>
+
+<footer>ساخته‌شده برای عاشقان خلاقیت ✦ PROMPTVERSE</footer>
+
+<div class="modal" id="modal">
+  <div class="modalbox">
+    <h3 id="modalTitle">متن پرامپت</h3>
+    <p id="modalText"></p>
+    <div class="modalbuttons">
+      <button class="close" onclick="closeModal()">بستن</button>
+      <button class="modalcopy" onclick="copyCurrent()">کپی پرامپت</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const prompts=[
+{id:1,title:"پرتره سینمایی",cat:"پرتره",art:"a",desc:"چهره طبیعی با نورپردازی دراماتیک و فضای سینمایی",text:"Create an ultra realistic cinematic portrait of a person, natural skin texture, expressive eyes, dramatic Rembrandt lighting, elegant dark background, 85mm lens, shallow depth of field, editorial photography, highly detailed."},
+{id:2,title:"استایل خیابانی",cat:"استایل",art:"b",desc:"استایل مدرن شهری با حس مجله‌های مد",text:"High fashion street style editorial photo of a person wearing a contemporary layered outfit, confident natural pose, stylish urban architecture, soft daylight, full body composition, realistic fabric texture, premium fashion photography."},
+{id:3,title:"پرتره مینیمال",cat:"پرتره",art:"c",desc:"پرتره ساده و شیک با نور نرم و پس‌زمینه خلوت",text:"Minimalist studio portrait of a person, clean neutral background, soft diffused window light, authentic facial details, natural expression, elegant composition, fine art editorial photography, photorealistic."},
+{id:4,title:"استایل لوکس",cat:"استایل",art:"d",desc:"ظاهر شیک و لوکس با جزئیات دقیق لباس",text:"Luxury fashion editorial portrait of a person in a sophisticated tailored outfit, refined accessories, warm architectural setting, golden hour lighting, elegant confident pose, exquisite textile details, premium magazine campaign."},
+{id:5,title:"پرتره هنری",cat:"پرتره",art:"e",desc:"فضای هنری با رنگ‌های لطیف و حال‌وهوای خاص",text:"Artistic fine art portrait of a person, poetic mood, subtle lavender and mauve color palette, soft diffused light, delicate shadows, natural skin texture, thoughtful gaze, dreamy realistic editorial photography."},
+{id:6,title:"جزئیات پوشاک",cat:"پوشاک",art:"f",desc:"نمای نزدیک از بافت، دوخت و جزئیات لباس",text:"Premium fashion detail photography focusing on garment craftsmanship, visible fabric weave and stitching, elegant folds, tactile textile texture, soft studio lighting, sophisticated color palette, macro editorial photography, ultra realistic."}
+];
+
+let filter="همه";
+let current=null;
+let favorites=JSON.parse(localStorage.getItem("pv-favorites")||"[]");
+
+function render(){
+ const q=document.getElementById("search").value.trim().toLowerCase();
+ const list=prompts.filter(p=>{
+  const categoryOK=filter==="همه"||(filter==="علاقه‌مندی"?favorites.includes(p.id):p.cat===filter);
+  const searchOK=(p.title+" "+p.cat+" "+p.desc).toLowerCase().includes(q);
+  return categoryOK&&searchOK;
+ });
+ document.getElementById("count").textContent=list.length+" پرامپت";
+ document.getElementById("grid").innerHTML=list.length?list.map(p=>`
+ <article class="card">
+  <div class="art ${p.art}"><span class="category">${p.cat}</span></div>
+  <div class="info">
+   <div class="cardtop">
+    <h3>${p.title}</h3>
+    <button class="heart ${favorites.includes(p.id)?"saved":""}" onclick="toggleFavorite(${p.id})">♥</button>
+   </div>
+   <p>${p.desc}</p>
+   <div class="actions">
+    <button class="copy" onclick="openPrompt(${p.id})">مشاهده و کپی ↗</button>
+    <button class="show" onclick="openPrompt(${p.id})">متن</button>
+   </div>
+  </div>
+ </article>`).join(""):'<div class="empty">پرامپتی پیدا نشد.</div>';
+}
+
+function toggleFavorite(id){
+ favorites=favorites.includes(id)?favorites.filter(x=>x!==id):[...favorites,id];
+ localStorage.setItem("pv-favorites",JSON.stringify(favorites));
+ render();
+}
+
+function openPrompt(id){
+ current=prompts.find(p=>p.id===id);
+ document.getElementById("modalTitle").textContent=current.title;
+ document.getElementById("modalText").textContent=current.text;
+ document.getElementById("modal").classList.add("open");
+}
+
+function closeModal(){
+ document.getElementById("modal").classList.remove("open");
+}
+
+async function copyCurrent(){
+ if(!current)return;
+ try{
+  await navigator.clipboard.writeText(current.text);
+  alert("پرامپت با موفقیت کپی شد!");
+ }catch(e){
+  window.prompt("متن را انتخاب و کپی کن:",current.text);
+ }
+}
+
+document.getElementById("search").addEventListener("input",render);
+document.querySelector(".filters").addEventListener("click",e=>{
+ const b=e.target.closest("[data-filter]");
+ if(!b)return;
+ filter=b.dataset.filter;
+ document.querySelectorAll(".filters button").forEach(x=>x.classList.toggle("active",x===b));
+ render();
+});
+document.getElementById("modal").addEventListener("click",e=>{
+ if(e.target.id==="modal")closeModal();
+});
+render();
+</script>
+</body>
+</html>
