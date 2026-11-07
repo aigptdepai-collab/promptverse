@@ -184,59 +184,10 @@ footer{
   © 2026 PROMPTVERSE — All Rights Reserved
 </footer>
 
-<script>
-const items=[
-{
- title:"پرتره سینمایی زن",
- category:"چهره و پرتره",
- image:"https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=700",
- prompt:"Ultra realistic cinematic portrait of a beautiful woman, dramatic soft lighting, detailed skin texture, professional photography, 85mm lens, shallow depth of field, luxury editorial style, 8k."
-},
-{
- title:"استایل فشن لوکس",
- category:"استایل و لباس",
- image:"https://images.unsplash.com/photo-1539109136881-3be0616acf4b?w=700",
- prompt:"High fashion editorial photography, elegant luxury outfit, confident model pose, cinematic studio lighting, premium fashion magazine aesthetic, ultra realistic details."
-},
-{
- title:"زیبایی مینیمال",
- category:"زیبایی و زیبایی‌شناسی",
- image:"https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=700",
- prompt:"Minimal aesthetic beauty portrait, natural soft makeup, delicate light, clean background, dreamy atmosphere, realistic photography, refined composition."
-},
-{
- title:"پرتره هنری",
- category:"چهره و پرتره",
- image:"https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?w=700",
- prompt:"Artistic close-up portrait, expressive eyes, soft cinematic shadows, beautiful natural skin, fine details, editorial photography, masterpiece."
-},
-{
- title:"استایل خیابانی",
- category:"استایل و لباس",
- image:"https://images.unsplash.com/photo-1529139574466-a303027c1d8b?w=700",
- prompt:"Street style fashion photography, modern urban outfit, dynamic pose, city background, cinematic natural light, high-end fashion campaign."
-},
-{
- title:"پرتره با نور طلایی",
- category:"چهره و پرتره",
- image:"https://images.unsplash.com/photo-1517841905240-472988babdf9?w=700",
- prompt:"Beautiful portrait during golden hour, warm sunlight, natural expression, glowing skin, cinematic photography, realistic details, soft bokeh."
-},
-{
- title:"فشن مجله‌ای",
- category:"استایل و لباس",
- image:"https://images.unsplash.com/photo-1483985988355-763728e1935b?w=700",
- prompt:"Luxury fashion magazine editorial, sophisticated outfit, elegant styling, professional studio photography, dramatic composition, high detail."
-},
-{
- title:"فضای رؤیایی",
- category:"زیبایی و زیبایی‌شناسی",
- image:"https://images.unsplash.com/photo-1490750967868-88aa4486c946?w=700",
- prompt:"Dreamy pastel aesthetic, delicate flowers, ethereal soft lighting, elegant composition, romantic atmosphere, high quality photography."
-}
-];
 
-const categories=["همه","چهره و پرتره","استایل و لباس","زیبایی و زیبایی‌شناسی","علاقه‌مندی‌ها"];
+<script>
+let items=[];
+let categories=["همه","علاقه‌مندی‌ها"];
 let active="همه";
 let selected=null;
 let favorites=JSON.parse(localStorage.getItem("pv-favorites")||"[]");
@@ -246,35 +197,63 @@ function renderFilters(){
  `<button class="chip ${active===c?'active':''}" onclick="setCategory('${c}')">${c}</button>`
  ).join("");
 }
-function setCategory(c){active=c;renderFilters();render()}
+
+function setCategory(c){
+ active=c;
+ renderFilters();
+ render();
+}
+
 function render(){
  const q=document.getElementById("search").value.trim().toLowerCase();
- const list=items.map((x,i)=>({...x,id:i})).filter(x=>
- (active==="همه" || x.category===active || (active==="علاقه‌مندی‌ها" && favorites.includes(x.id))) &&
- (x.title.toLowerCase().includes(q)||x.category.toLowerCase().includes(q))
+
+ const list=items.filter(x=>
+ (active==="همه" ||
+ x.category===active ||
+ (active==="علاقه‌مندی‌ها" && favorites.includes(String(x.id)))) &&
+ (x.title.toLowerCase().includes(q) ||
+ x.category.toLowerCase().includes(q))
  );
+
  document.getElementById("count").textContent=list.length+" پرامپت";
+
  document.getElementById("grid").innerHTML=list.length?list.map(x=>`
- <article class="card" onclick="openModal(${x.id})">
- <button class="heart ${favorites.includes(x.id)?'saved':''}" onclick="toggleFavorite(event,${x.id})">${favorites.includes(x.id)?"♥":"♡"}</button>
+ <article class="card" onclick="openModal('${x.id}')">
+ <button class="heart ${favorites.includes(String(x.id))?'saved':''}" onclick="toggleFavorite(event,'${x.id}')">${favorites.includes(String(x.id))?"♥":"♡"}</button>
  <img src="${x.image}" alt="${x.title}" loading="lazy">
- <div class="card-info"><h3>${x.title}</h3><p>${x.category} · مشاهده پرامپت ←</p></div>
+ <div class="card-info">
+ <h3>${x.title}</h3>
+ <p>${x.category} · مشاهده پرامپت ←</p>
+ </div>
  </article>`).join(""):'<div class="empty">موردی پیدا نشد.</div>';
 }
+
 function toggleFavorite(e,id){
  e.stopPropagation();
- favorites=favorites.includes(id)?favorites.filter(x=>x!==id):[...favorites,id];
+ id=String(id);
+ favorites=favorites.includes(id)
+ ?favorites.filter(x=>x!==id)
+ :[...favorites,id];
+
  localStorage.setItem("pv-favorites",JSON.stringify(favorites));
  render();
 }
+
 function openModal(id){
- selected=items[id];
+ selected=items.find(x=>String(x.id)===String(id));
+ if(!selected)return;
+
  document.getElementById("modalTitle").textContent=selected.title;
  document.getElementById("modalPrompt").textContent=selected.prompt;
  document.getElementById("modal").classList.add("show");
 }
-function closeModal(){document.getElementById("modal").classList.remove("show")}
+
+function closeModal(){
+ document.getElementById("modal").classList.remove("show");
+}
+
 async function copyPrompt(){
+ if(!selected)return;
  try{
  await navigator.clipboard.writeText(selected.prompt);
  document.querySelector(".copy").textContent="کپی شد ✓";
@@ -283,9 +262,51 @@ async function copyPrompt(){
  document.getElementById("modalPrompt").focus();
  }
 }
+
+async function loadPublicData(){
+ try{
+ const [catResponse,promptResponse]=await Promise.all([
+ fetch("https://promptverse-admin.aigptdepai.workers.dev/api/public/categories"),
+ fetch("https://promptverse-admin.aigptdepai.workers.dev/api/public/prompts")
+ ]);
+
+ if(!catResponse.ok || !promptResponse.ok){
+ throw new Error("خطا در دریافت اطلاعات");
+ }
+
+ const catData=await catResponse.json();
+ const promptData=await promptResponse.json();
+
+ const catList=Array.isArray(catData)?catData:(catData.categories||[]);
+ const promptList=Array.isArray(promptData)?promptData:(promptData.prompts||[]);
+
+ const categoryMap={};
+ catList.forEach(c=>categoryMap[c.id]=c.name);
+
+ categories=["همه",...catList.map(c=>c.name),"علاقه‌مندی‌ها"];
+
+ items=promptList.map(p=>({
+ id:p.id,
+ title:p.title,
+ category:categoryMap[p.category_id]||"بدون دسته‌بندی",
+ image:p.image_url||"",
+ prompt:p.prompt_text||""
+ }));
+
+ renderFilters();
+ render();
+
+ }catch(error){
+ console.error(error);
+ document.getElementById("count").textContent="خطا در دریافت اطلاعات";
+ document.getElementById("grid").innerHTML='<div class="empty">دریافت اطلاعات با مشکل مواجه شد.</div>';
+ }
+}
+
 document.getElementById("search").addEventListener("input",render);
+
 renderFilters();
-render();
+loadPublicData();
 </script>
 </body>
 </html>
