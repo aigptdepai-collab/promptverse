@@ -1,190 +1,290 @@
-
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#100d1d">
+<meta name="theme-color" content="#090710">
 <title>PROMPTVERSE | دنیای پرامپت‌ها</title>
 <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
+:root{
+  --bg:#090710;
+  --panel:#14101f;
+  --purple:#a855f7;
+  --pink:#e879f9;
+  --text:#f7f2ff;
+  --muted:#aaa0b9;
+}
 *{box-sizing:border-box}
-body{margin:0;background:#100d1d;color:#f8f4ff;font-family:Vazirmatn,sans-serif}
-header{padding:20px 6%;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #302442}
-.logo{font-size:22px;font-weight:900;direction:ltr}
-.logo span{color:#b58aff}
-.tag{font-size:12px;color:#cbb6f4;background:#241b36;padding:9px 14px;border-radius:30px}
-.hero{text-align:center;padding:75px 18px 45px;background:radial-gradient(ellipse at top,#392052,transparent 70%)}
-.hero small{color:#c5a4ff}
-.hero h1{font-size:clamp(32px,7vw,58px);margin:18px 0}
-.hero h1 span{color:#c49aff}
-.hero p{color:#aaa0bd;line-height:2;max-width:580px;margin:auto}
-.search{display:block;width:min(550px,100%);margin:28px auto 0;padding:16px 20px;border-radius:14px;border:1px solid #403052;background:#1c1728;color:white;font:inherit;outline:none}
-.search:focus{border-color:#b58aff}
-.container{width:min(1100px,90%);margin:auto}
-.heading{display:flex;justify-content:space-between;align-items:center;margin:35px 0 16px}
-.heading h2{font-size:21px}
-.heading small{color:#a89bb9}
-.filters{display:flex;gap:9px;overflow:auto;padding:5px 0 18px}
-.filters button{white-space:nowrap;background:#1c1728;color:#c8bdd8;border:1px solid #382b49;padding:10px 17px;border-radius:30px;font:inherit;cursor:pointer}
-.filters button.active,.filters button:hover{background:#8e5be0;color:white;border-color:#8e5be0}
-.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;padding-bottom:65px}
-.card{background:#1b1627;border:1px solid #342741;border-radius:19px;overflow:hidden;transition:.2s}
-.card:hover{transform:translateY(-5px);border-color:#9668ce}
-.art{height:190px;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;background:radial-gradient(circle at 50% 35%,#a36bc0,#49305f 55%,#21182f)}
-.art:before{content:"";width:112px;height:145px;border-radius:48% 48% 38% 38%;background:linear-gradient(140deg,#f0c3b1,#9b657b 65%,#38243d);box-shadow:0 0 55px #d9a1ff55}
-.art:after{content:"";position:absolute;bottom:-55px;width:190px;height:120px;border-radius:50% 50% 0 0;background:#30213f}
-.art.b{background:radial-gradient(circle at 50%,#a06c70,#472d46 60%,#21182f)}
-.art.c{background:radial-gradient(circle at 50%,#7180a8,#303655 60%,#21182f)}
-.art.d{background:radial-gradient(circle at 50%,#a98755,#483622 60%,#21182f)}
-.art.e{background:radial-gradient(circle at 50%,#a46f9b,#472c55 60%,#21182f)}
-.art.f{background:radial-gradient(circle at 50%,#57918a,#24474b 60%,#21182f)}
-.category{position:absolute;z-index:2;bottom:12px;right:13px;background:#171020cc;border:1px solid #ffffff30;border-radius:20px;padding:5px 12px;font-size:11px}
-.info{padding:17px}
-.cardtop{display:flex;justify-content:space-between;align-items:center}
-.card h3{font-size:16px;margin:0}
-.heart{background:none;border:0;color:#a99ab9;font-size:23px;cursor:pointer}
-.heart.saved{color:#ff83c5}
-.info p{font-size:12px;color:#aaa0bd;line-height:2;min-height:45px}
-.actions{display:flex;gap:8px}
-.actions button{padding:10px;border:0;border-radius:10px;font:inherit;font-size:12px;cursor:pointer}
-.copy{background:linear-gradient(100deg,#8e5be0,#c28bfa);color:white;flex:1}
-.show{background:#30243f;color:#e7d8ff}
-.empty{grid-column:1/-1;text-align:center;color:#aaa;padding:40px}
-footer{text-align:center;border-top:1px solid #302442;padding:25px;color:#8e829e;font-size:12px}
-.modal{display:none;position:fixed;inset:0;background:#080610dd;z-index:10;align-items:center;justify-content:center;padding:18px}
-.modal.open{display:flex}
-.modalbox{background:#211a30;border:1px solid #59416f;border-radius:20px;padding:23px;width:min(550px,100%);max-height:85vh;overflow:auto}
-.modalbox h3{margin-top:0}
-.modalbox p{color:#ddd2eb;line-height:2;direction:ltr;text-align:left;overflow-wrap:anywhere;font-size:13px}
-.modalbuttons{display:flex;gap:10px}
-.modalbuttons button{padding:11px;border:0;border-radius:10px;font:inherit;cursor:pointer}
-.close{background:#3a2d4d;color:white}
-.modalcopy{background:#a77ae5;color:white;flex:1}
-@media(max-width:750px){.grid{grid-template-columns:repeat(2,1fr)}}
-@media(max-width:520px){.grid{grid-template-columns:1fr}.hero{padding-top:55px}.art{height:210px}}
+body{
+  margin:0;background:var(--bg);color:var(--text);
+  font-family:'Vazirmatn',sans-serif;
+}
+header{
+  height:76px;padding:0 7%;display:flex;
+  justify-content:space-between;align-items:center;
+  border-bottom:1px solid #ffffff12;
+  position:sticky;top:0;background:#090710ed;
+  backdrop-filter:blur(15px);z-index:10;
+}
+.logo{font-size:24px;font-weight:900;letter-spacing:1px}
+.logo span{color:var(--purple)}
+nav a{color:#ddd;text-decoration:none;margin:0 12px;font-size:13px}
+.hero{
+  min-height:470px;padding:90px 20px 75px;text-align:center;
+  background:linear-gradient(180deg,#28103c99,#090710 95%),
+  url('https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=1800') center/cover;
+  display:flex;flex-direction:column;justify-content:center;align-items:center;
+}
+.tag{
+  border:1px solid #b65cff66;border-radius:30px;
+  padding:7px 18px;color:#e6baff;font-size:12px;
+  background:#8b35bb22;
+}
+h1{font-size:clamp(38px,7vw,76px);line-height:1.35;margin:22px 0 10px;font-weight:900}
+h1 span{
+  background:linear-gradient(90deg,#c084fc,#f0abfc);
+  -webkit-background-clip:text;color:transparent;
+}
+.hero p{color:#e0d5eb;max-width:600px;line-height:2;font-size:15px}
+.search{
+  margin-top:24px;width:min(560px,92%);
+  display:flex;background:#171222;border:1px solid #ffffff25;
+  border-radius:15px;padding:7px;
+}
+.search input{
+  flex:1;min-width:0;background:transparent;border:0;
+  outline:0;color:white;padding:12px;font:inherit;
+}
+.search button,.primary{
+  border:0;border-radius:11px;padding:12px 22px;
+  background:linear-gradient(120deg,#9333ea,#c026d3);
+  color:white;font:inherit;font-weight:700;cursor:pointer;
+}
+main{max-width:1250px;margin:auto;padding:55px 22px}
+.section-head{
+  display:flex;justify-content:space-between;
+  align-items:center;gap:15px;margin-bottom:24px;
+}
+h2{font-size:25px;margin:0}
+.section-head p{color:var(--muted);font-size:12px}
+.categories{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:35px}
+.chip{
+  padding:9px 18px;border-radius:30px;
+  background:#171222;border:1px solid #ffffff16;
+  color:#ddd;cursor:pointer;font:inherit;font-size:13px;
+}
+.chip.active,.chip:hover{background:#7826a9;border-color:#bd6aff}
+.grid{
+  display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));
+  gap:22px;
+}
+.card{
+  background:var(--panel);border:1px solid #ffffff12;
+  border-radius:17px;overflow:hidden;transition:.3s;
+  cursor:pointer;position:relative;
+}
+.card:hover{transform:translateY(-7px);border-color:#a855f766;box-shadow:0 15px 40px #8b21ba20}
+.card img{width:100%;height:280px;object-fit:cover;display:block}
+.card-info{padding:15px}
+.card-info h3{margin:0 0 7px;font-size:15px}
+.card-info p{color:var(--muted);font-size:12px;margin:0}
+.heart{
+  position:absolute;top:12px;left:12px;
+  width:38px;height:38px;border:0;border-radius:50%;
+  background:#090710bb;color:white;font-size:21px;cursor:pointer;
+}
+.heart.saved{color:#ff5eae}
+.modal{
+  display:none;position:fixed;inset:0;z-index:30;
+  background:#000c;align-items:center;justify-content:center;padding:18px;
+}
+.modal.show{display:flex}
+.modal-box{
+  width:min(520px,100%);background:#171222;
+  border:1px solid #a855f755;border-radius:20px;
+  padding:25px;max-height:90vh;overflow:auto;
+}
+.modal-box h2{margin-bottom:15px}
+.modal-box p{color:#d7cce2;line-height:2;font-size:14px}
+.close{float:left;background:none;border:0;color:white;font-size:25px;cursor:pointer}
+.copy{width:100%;margin-top:15px}
+.empty{color:var(--muted);text-align:center;padding:35px;grid-column:1/-1}
+footer{
+  border-top:1px solid #ffffff12;text-align:center;
+  padding:35px 15px;color:#8f849d;font-size:12px;line-height:2;
+}
+@media(max-width:600px){
+  header{padding:0 17px;height:65px}
+  nav a{margin:0 4px;font-size:11px}
+  .hero{min-height:410px;padding:65px 15px}
+  main{padding:38px 15px}
+  .grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+  .card img{height:210px}
+  .card-info{padding:11px}
+  .card-info h3{font-size:12px}
+}
 </style>
 </head>
 <body>
+
 <header>
   <div class="logo">PROMPT<span>VERSE</span></div>
-  <div class="tag">کتابخانه پرامپت فارسی ✦</div>
+  <nav>
+    <a href="#gallery">گالری</a>
+    <a href="#categories">دسته‌بندی‌ها</a>
+  </nav>
 </header>
 
 <section class="hero">
-  <small>✦ دنیای ایده‌های بی‌انتها ✦</small>
-  <h1>تصویر ذهنی‌ات را <span>خلق کن</span></h1>
-  <p>پرامپت‌های خلاقانه برای ساخت تصاویر خاص، پرتره‌های جذاب و استایل‌های متفاوت را کشف کن.</p>
-  <input class="search" id="search" placeholder="جستجو بین پرامپت‌ها...">
+  <div class="tag">✦ دنیای بی‌نهایت خلاقیت با هوش مصنوعی</div>
+  <h1>تصور کن، <span>خلق کن</span></h1>
+  <p>به دنیای پرامپت‌های حرفه‌ای خوش آمدی. ایده‌هایت را به تصاویر شگفت‌انگیز تبدیل کن.</p>
+  <div class="search">
+    <input id="search" placeholder="دنبال چه تصویری می‌گردی؟">
+    <button onclick="render()">جست‌وجو</button>
+  </div>
 </section>
 
-<main class="container">
-  <div class="heading">
-    <h2>گالری پرامپت‌ها</h2>
-    <small id="count"></small>
-  </div>
+<main>
+  <section id="categories">
+    <div class="section-head">
+      <div>
+        <h2>دسته‌بندی‌ها</h2>
+        <p>سبک مورد علاقه‌ات را انتخاب کن</p>
+      </div>
+    </div>
+    <div class="categories" id="filters"></div>
+  </section>
 
-  <nav class="filters">
-    <button class="active" data-filter="همه">همه</button>
-    <button data-filter="پرتره">پرتره</button>
-    <button data-filter="استایل">استایل</button>
-    <button data-filter="پوشاک">پوشاک</button>
-    <button data-filter="علاقه‌مندی">♡ علاقه‌مندی‌ها</button>
-  </nav>
-
-  <section class="grid" id="grid"></section>
+  <section id="gallery">
+    <div class="section-head">
+      <div>
+        <h2>گالری پرامپت‌ها</h2>
+        <p>برای دیدن پرامپت روی تصویر بزن</p>
+      </div>
+      <span id="count" style="color:#c084fc;font-size:12px"></span>
+    </div>
+    <div class="grid" id="grid"></div>
+  </section>
 </main>
 
-<footer>ساخته‌شده برای عاشقان خلاقیت ✦ PROMPTVERSE</footer>
-
-<div class="modal" id="modal">
-  <div class="modalbox">
-    <h3 id="modalTitle">متن پرامپت</h3>
-    <p id="modalText"></p>
-    <div class="modalbuttons">
-      <button class="close" onclick="closeModal()">بستن</button>
-      <button class="modalcopy" onclick="copyCurrent()">کپی پرامپت</button>
-    </div>
+<div class="modal" id="modal" onclick="if(event.target===this)closeModal()">
+  <div class="modal-box">
+    <button class="close" onclick="closeModal()">×</button>
+    <h2 id="modalTitle"></h2>
+    <p id="modalPrompt"></p>
+    <button class="primary copy" onclick="copyPrompt()">کپی کردن پرامپت ✦</button>
   </div>
 </div>
 
+<footer>
+  <div class="logo">PROMPT<span>VERSE</span></div>
+  <p>جایی برای تبدیل تخیل به واقعیت</p>
+  © 2026 PROMPTVERSE — All Rights Reserved
+</footer>
+
 <script>
-const prompts=[
-{id:1,title:"پرتره سینمایی",cat:"پرتره",art:"a",desc:"چهره طبیعی با نورپردازی دراماتیک و فضای سینمایی",text:"Create an ultra realistic cinematic portrait of a person, natural skin texture, expressive eyes, dramatic Rembrandt lighting, elegant dark background, 85mm lens, shallow depth of field, editorial photography, highly detailed."},
-{id:2,title:"استایل خیابانی",cat:"استایل",art:"b",desc:"استایل مدرن شهری با حس مجله‌های مد",text:"High fashion street style editorial photo of a person wearing a contemporary layered outfit, confident natural pose, stylish urban architecture, soft daylight, full body composition, realistic fabric texture, premium fashion photography."},
-{id:3,title:"پرتره مینیمال",cat:"پرتره",art:"c",desc:"پرتره ساده و شیک با نور نرم و پس‌زمینه خلوت",text:"Minimalist studio portrait of a person, clean neutral background, soft diffused window light, authentic facial details, natural expression, elegant composition, fine art editorial photography, photorealistic."},
-{id:4,title:"استایل لوکس",cat:"استایل",art:"d",desc:"ظاهر شیک و لوکس با جزئیات دقیق لباس",text:"Luxury fashion editorial portrait of a person in a sophisticated tailored outfit, refined accessories, warm architectural setting, golden hour lighting, elegant confident pose, exquisite textile details, premium magazine campaign."},
-{id:5,title:"پرتره هنری",cat:"پرتره",art:"e",desc:"فضای هنری با رنگ‌های لطیف و حال‌وهوای خاص",text:"Artistic fine art portrait of a person, poetic mood, subtle lavender and mauve color palette, soft diffused light, delicate shadows, natural skin texture, thoughtful gaze, dreamy realistic editorial photography."},
-{id:6,title:"جزئیات پوشاک",cat:"پوشاک",art:"f",desc:"نمای نزدیک از بافت، دوخت و جزئیات لباس",text:"Premium fashion detail photography focusing on garment craftsmanship, visible fabric weave and stitching, elegant folds, tactile textile texture, soft studio lighting, sophisticated color palette, macro editorial photography, ultra realistic."}
+const items=[
+{
+ title:"پرتره سینمایی زن",
+ category:"چهره و پرتره",
+ image:"https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=700",
+ prompt:"Ultra realistic cinematic portrait of a beautiful woman, dramatic soft lighting, detailed skin texture, professional photography, 85mm lens, shallow depth of field, luxury editorial style, 8k."
+},
+{
+ title:"استایل فشن لوکس",
+ category:"استایل و لباس",
+ image:"https://images.unsplash.com/photo-1539109136881-3be0616acf4b?w=700",
+ prompt:"High fashion editorial photography, elegant luxury outfit, confident model pose, cinematic studio lighting, premium fashion magazine aesthetic, ultra realistic details."
+},
+{
+ title:"زیبایی مینیمال",
+ category:"زیبایی و زیبایی‌شناسی",
+ image:"https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=700",
+ prompt:"Minimal aesthetic beauty portrait, natural soft makeup, delicate light, clean background, dreamy atmosphere, realistic photography, refined composition."
+},
+{
+ title:"پرتره هنری",
+ category:"چهره و پرتره",
+ image:"https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?w=700",
+ prompt:"Artistic close-up portrait, expressive eyes, soft cinematic shadows, beautiful natural skin, fine details, editorial photography, masterpiece."
+},
+{
+ title:"استایل خیابانی",
+ category:"استایل و لباس",
+ image:"https://images.unsplash.com/photo-1529139574466-a303027c1d8b?w=700",
+ prompt:"Street style fashion photography, modern urban outfit, dynamic pose, city background, cinematic natural light, high-end fashion campaign."
+},
+{
+ title:"پرتره با نور طلایی",
+ category:"چهره و پرتره",
+ image:"https://images.unsplash.com/photo-1517841905240-472988babdf9?w=700",
+ prompt:"Beautiful portrait during golden hour, warm sunlight, natural expression, glowing skin, cinematic photography, realistic details, soft bokeh."
+},
+{
+ title:"فشن مجله‌ای",
+ category:"استایل و لباس",
+ image:"https://images.unsplash.com/photo-1483985988355-763728e1935b?w=700",
+ prompt:"Luxury fashion magazine editorial, sophisticated outfit, elegant styling, professional studio photography, dramatic composition, high detail."
+},
+{
+ title:"فضای رؤیایی",
+ category:"زیبایی و زیبایی‌شناسی",
+ image:"https://images.unsplash.com/photo-1490750967868-88aa4486c946?w=700",
+ prompt:"Dreamy pastel aesthetic, delicate flowers, ethereal soft lighting, elegant composition, romantic atmosphere, high quality photography."
+}
 ];
 
-let filter="همه";
-let current=null;
+const categories=["همه","چهره و پرتره","استایل و لباس","زیبایی و زیبایی‌شناسی","علاقه‌مندی‌ها"];
+let active="همه";
+let selected=null;
 let favorites=JSON.parse(localStorage.getItem("pv-favorites")||"[]");
 
+function renderFilters(){
+ document.getElementById("filters").innerHTML=categories.map(c=>
+ `<button class="chip ${active===c?'active':''}" onclick="setCategory('${c}')">${c}</button>`
+ ).join("");
+}
+function setCategory(c){active=c;renderFilters();render()}
 function render(){
  const q=document.getElementById("search").value.trim().toLowerCase();
- const list=prompts.filter(p=>{
-  const categoryOK=filter==="همه"||(filter==="علاقه‌مندی"?favorites.includes(p.id):p.cat===filter);
-  const searchOK=(p.title+" "+p.cat+" "+p.desc).toLowerCase().includes(q);
-  return categoryOK&&searchOK;
- });
+ const list=items.map((x,i)=>({...x,id:i})).filter(x=>
+ (active==="همه" || x.category===active || (active==="علاقه‌مندی‌ها" && favorites.includes(x.id))) &&
+ (x.title.toLowerCase().includes(q)||x.category.toLowerCase().includes(q))
+ );
  document.getElementById("count").textContent=list.length+" پرامپت";
- document.getElementById("grid").innerHTML=list.length?list.map(p=>`
- <article class="card">
-  <div class="art ${p.art}"><span class="category">${p.cat}</span></div>
-  <div class="info">
-   <div class="cardtop">
-    <h3>${p.title}</h3>
-    <button class="heart ${favorites.includes(p.id)?"saved":""}" onclick="toggleFavorite(${p.id})">♥</button>
-   </div>
-   <p>${p.desc}</p>
-   <div class="actions">
-    <button class="copy" onclick="openPrompt(${p.id})">مشاهده و کپی ↗</button>
-    <button class="show" onclick="openPrompt(${p.id})">متن</button>
-   </div>
-  </div>
- </article>`).join(""):'<div class="empty">پرامپتی پیدا نشد.</div>';
+ document.getElementById("grid").innerHTML=list.length?list.map(x=>`
+ <article class="card" onclick="openModal(${x.id})">
+ <button class="heart ${favorites.includes(x.id)?'saved':''}" onclick="toggleFavorite(event,${x.id})">${favorites.includes(x.id)?"♥":"♡"}</button>
+ <img src="${x.image}" alt="${x.title}" loading="lazy">
+ <div class="card-info"><h3>${x.title}</h3><p>${x.category} · مشاهده پرامپت ←</p></div>
+ </article>`).join(""):'<div class="empty">موردی پیدا نشد.</div>';
 }
-
-function toggleFavorite(id){
+function toggleFavorite(e,id){
+ e.stopPropagation();
  favorites=favorites.includes(id)?favorites.filter(x=>x!==id):[...favorites,id];
  localStorage.setItem("pv-favorites",JSON.stringify(favorites));
  render();
 }
-
-function openPrompt(id){
- current=prompts.find(p=>p.id===id);
- document.getElementById("modalTitle").textContent=current.title;
- document.getElementById("modalText").textContent=current.text;
- document.getElementById("modal").classList.add("open");
+function openModal(id){
+ selected=items[id];
+ document.getElementById("modalTitle").textContent=selected.title;
+ document.getElementById("modalPrompt").textContent=selected.prompt;
+ document.getElementById("modal").classList.add("show");
 }
-
-function closeModal(){
- document.getElementById("modal").classList.remove("open");
-}
-
-async function copyCurrent(){
- if(!current)return;
+function closeModal(){document.getElementById("modal").classList.remove("show")}
+async function copyPrompt(){
  try{
-  await navigator.clipboard.writeText(current.text);
-  alert("پرامپت با موفقیت کپی شد!");
+ await navigator.clipboard.writeText(selected.prompt);
+ document.querySelector(".copy").textContent="کپی شد ✓";
+ setTimeout(()=>document.querySelector(".copy").textContent="کپی کردن پرامپت ✦",1500);
  }catch(e){
-  window.prompt("متن را انتخاب و کپی کن:",current.text);
+ document.getElementById("modalPrompt").focus();
  }
 }
-
 document.getElementById("search").addEventListener("input",render);
-document.querySelector(".filters").addEventListener("click",e=>{
- const b=e.target.closest("[data-filter]");
- if(!b)return;
- filter=b.dataset.filter;
- document.querySelectorAll(".filters button").forEach(x=>x.classList.toggle("active",x===b));
- render();
-});
-document.getElementById("modal").addEventListener("click",e=>{
- if(e.target.id==="modal")closeModal();
-});
+renderFilters();
 render();
 </script>
 </body>
