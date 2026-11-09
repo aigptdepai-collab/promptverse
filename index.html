@@ -112,38 +112,95 @@ nav a:hover {
   box-shadow: 0 6px 25px rgba(168, 85, 247, 0.45);
 }
 
-/* Hero */
+/* Animated luxury hero */
 .hero {
   position: relative;
-  padding: 100px 0 80px;
+  padding: 76px 0 68px;
   overflow: hidden;
+  isolation: isolate;
+  background:
+    radial-gradient(ellipse at 78% 42%, rgba(126, 34, 206, .18), transparent 42%),
+    linear-gradient(115deg, #090612 0%, #10091d 52%, #090711 100%);
+}
+.hero::before, .hero::after {
+  content: "";
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+  filter: blur(2px);
+  z-index: -1;
 }
 .hero::before {
-  content: "";
-  position: absolute;
-  width: 600px;
-  height: 600px;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(168,85,247,0.18), transparent 70%);
-  top: -200px;
-  right: -150px;
-  pointer-events: none;
+  width: 560px; height: 560px;
+  top: -270px; right: 12%;
+  background: radial-gradient(circle, rgba(168,85,247,.23), transparent 68%);
+  animation: heroGlow 10s ease-in-out infinite alternate;
 }
 .hero::after {
-  content: "";
-  position: absolute;
-  width: 400px;
-  height: 400px;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(232,121,249,0.1), transparent 70%);
-  bottom: -100px;
-  left: -100px;
-  pointer-events: none;
+  width: 420px; height: 420px;
+  bottom: -280px; left: 5%;
+  background: radial-gradient(circle, rgba(232,121,249,.16), transparent 70%);
+  animation: heroGlow 12s ease-in-out infinite alternate-reverse;
+}
+.hero-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(300px, .95fr);
+  align-items: center;
+  gap: clamp(28px, 5vw, 76px);
 }
 .hero-content {
   position: relative;
-  z-index: 1;
+  z-index: 2;
   max-width: 700px;
+  animation: heroRise .8s both;
+}
+.hero-visual {
+  position: relative;
+  min-height: 390px;
+  border-radius: 30px;
+  overflow: hidden;
+  border: 1px solid rgba(216,180,254,.25);
+  box-shadow: 0 28px 90px rgba(0,0,0,.48), 0 0 55px rgba(168,85,247,.16);
+  transform: translateZ(0);
+  animation: heroFloat 7s ease-in-out infinite;
+}
+.hero-visual::before {
+  content: "";
+  position: absolute; inset: 0; z-index: 1;
+  background: linear-gradient(180deg, rgba(9,6,18,.02) 35%, rgba(9,6,18,.88) 100%),
+              linear-gradient(110deg, rgba(168,85,247,.16), transparent 55%);
+}
+.hero-visual img {
+  width: 100%; height: 100%; min-height: 390px;
+  object-fit: cover;
+  object-position: center 35%;
+  filter: saturate(.86);
+  animation: heroImage 24s ease-in-out infinite alternate;
+}
+.hero-visual-caption {
+  position: absolute; z-index: 2; right: 24px; bottom: 22px; left: 24px;
+  display: flex; align-items: end; justify-content: space-between; gap: 12px;
+}
+.hero-visual-caption strong { display:block; font-size:17px; }
+.hero-visual-caption span { color:#e9d5ff; font-size:11px; }
+.hero-orbit {
+  position: absolute; z-index: 3; top: 22px; left: 22px;
+  width: 54px; height: 54px; border-radius: 18px;
+  display:grid; place-items:center;
+  color:#fff; font-size:24px;
+  background:rgba(18,10,31,.55);
+  border:1px solid rgba(255,255,255,.24);
+  backdrop-filter:blur(12px);
+  box-shadow:0 0 30px rgba(216,180,254,.25);
+  animation: orbitPulse 3s ease-in-out infinite;
+}
+@keyframes heroRise { from { opacity:0; transform:translateY(22px); } to { opacity:1; transform:translateY(0); } }
+@keyframes heroFloat { 0%,100% { transform:translateY(0) rotate(0); } 50% { transform:translateY(-9px) rotate(.35deg); } }
+@keyframes heroImage { from { transform:scale(1); } to { transform:scale(1.09); } }
+@keyframes heroGlow { from { transform:translate3d(-18px,0,0) scale(.92); } to { transform:translate3d(24px,18px,0) scale(1.12); } }
+@keyframes orbitPulse { 0%,100% { box-shadow:0 0 18px rgba(216,180,254,.18); } 50% { box-shadow:0 0 34px rgba(216,180,254,.48); } }
+@media (prefers-reduced-motion: reduce) {
+  .hero-content, .hero-visual, .hero-visual img, .hero::before, .hero::after, .hero-orbit { animation:none !important; }
 }
 .eyebrow {
   display: inline-flex;
@@ -673,7 +730,11 @@ footer p {
   .navbar { height: 64px; }
   .logo { font-size: 18px; }
   nav a:not(.nav-cta) { display: none; }
-  .hero { padding: 70px 0 60px; }
+  .hero { padding: 54px 0 48px; }
+  .hero-layout { grid-template-columns: 1fr; gap: 30px; }
+  .hero-content { max-width: 100%; }
+  .hero-visual { min-height: 260px; max-height: 330px; border-radius: 22px; }
+  .hero-visual img { min-height: 260px; max-height: 330px; }
   .hero h1 { letter-spacing: -1px; }
   .stats { gap: 10px; }
   .stat { padding: 14px 8px; }
@@ -711,13 +772,12 @@ footer p {
 </header>
 
 <section class="hero">
-  <div class="container">
+  <div class="container hero-layout">
     <div class="hero-content">
-      <div class="eyebrow">✦ کتابخانه حرفه‌ای پرامپت هوش مصنوعی</div>
-      <h1>ایده‌هایت را<br><span>به تصویر تبدیل کن</span></h1>
+      <div class="eyebrow">✦ دنیای بی‌پایان خلاقیت با هوش مصنوعی</div>
+      <h1>تصور کن، خلق کن<br><span>فراتر از خیال</span></h1>
       <p class="hero-desc">
-        مجموعه‌ای از پرامپت‌های آماده و حرفه‌ای برای ساخت تصاویر شگفت‌انگیز با ابزارهای هوش مصنوعی.
-        جستجو کن، الهام بگیر و با یک کلیک کپی کن.
+        پرامپت‌های حرفه‌ای و آماده را کشف کن؛ ایده‌هایت را به تصاویری خیره‌کننده تبدیل کن و فقط با یک کلیک الهام بگیر.
       </p>
       <div class="search-wrap">
         <div class="search-box">
@@ -725,6 +785,14 @@ footer p {
           <button id="searchButton">جستجو</button>
         </div>
         <button class="btn-secondary" id="randomBtn">🎲 تصادفی</button>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=1200&q=88" alt="پرتره هنری با نورپردازی سینمایی" fetchpriority="high">
+      <div class="hero-orbit">✦</div>
+      <div class="hero-visual-caption">
+        <div><strong>هر ایده، یک جهان تازه</strong><span>CREATE • IMAGINE • INSPIRE</span></div>
+        <span>✧ PROMPTVERSE</span>
       </div>
     </div>
   </div>
