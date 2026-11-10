@@ -887,50 +887,11 @@ const $ = id => document.getElementById(id);
 
 function escapeHTML(value) {
   return String(value ?? "").replace(/[&<>"']/g, c =>
-    ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" }[c]));
+    ({ "&":"&","<":"<",">":">",'"':""","'":"&#39;" }[c]));
 }
 
 function getFeatured(item) {
   return Number(item.is_featured) === 1 || item.is_featured === true;
-}
-
-function getPromptImage(item) {
-  if (item.image && String(item.image).trim()) return item.image;
-
-  const cat = String(item.category || "").trim();
-
-  const byCategory = {
-    "کاپلی": [
-      "https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?w=900&q=85",
-      "https://images.unsplash.com/photo-1529333166437-7750a6dd5a70?w=900&q=85",
-      "https://images.unsplash.com/photo-1518199266791-5375a83190b7?w=900&q=85",
-      "https://images.unsplash.com/photo-1522673607200-164d1b6ce486?w=900&q=85",
-      "https://images.unsplash.com/photo-1494774157365-9e04c192da80?w=900&q=85"
-    ],
-    "چهره و پرتره": [
-      "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=900&q=85",
-      "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=900&q=85",
-      "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=900&q=85",
-      "https://images.unsplash.com/photo-1488426862026-3ee34a7d66df?w=900&q=85"
-    ],
-    "استایل و لباس": [
-      "https://images.unsplash.com/photo-1483985988355-763728e1935b?w=900&q=85",
-      "https://images.unsplash.com/photo-1539109136881-3be0616acf4b?w=900&q=85",
-      "https://images.unsplash.com/photo-1529139574466-a303027c1d8b?w=900&q=85",
-      "https://images.unsplash.com/photo-1566174053879-31528523f8ae?w=900&q=85"
-    ],
-    "هنری و فانتزی": [
-      "https://images.unsplash.com/photo-1534796636912-3b95b3ab5986?w=900&q=85",
-      "https://images.unsplash.com/photo-1448375240586-882707db888b?w=900&q=85",
-      "https://images.unsplash.com/photo-1499002238440-d264edd596ec?w=900&q=85",
-      "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=900&q=85"
-    ]
-  };
-
-  const key = Object.keys(byCategory).find(k => cat.includes(k) || k.includes(cat)) || cat;
-  const pool = byCategory[key] || byCategory["چهره و پرتره"];
-  const idNum = Number(item.id) || 0;
-  return pool[idNum % pool.length];
 }
 
 function saveFavorites() {
@@ -985,7 +946,7 @@ function cardHTML(item, index = 0) {
         <button class="heart ${saved ? "saved" : ""}" data-favorite="${escapeHTML(item.id)}" aria-label="علاقه‌مندی">
           ${saved ? "♥" : "♡"}
         </button>
-        <img src="${escapeHTML(getPromptImage(item))}" alt="${escapeHTML(item.title)}" loading="lazy"
+        <img src="${escapeHTML(item.image)}" alt="${escapeHTML(item.title)}" loading="lazy"
              onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22400%22 height=%22300%22%3E%3Crect fill=%22%231a1428%22 width=%22400%22 height=%22300%22/%3E%3Ctext fill=%22%239b8fb0%22 x=%2250%25%22 y=%2250%25%22 text-anchor=%22middle%22 dy=%22.3em%22 font-family=%22sans-serif%22 font-size=%2214%22%3Eبدون تصویر%3C/text%3E%3C/svg%3E'">
       </div>
       <div class="card-info">
@@ -1052,7 +1013,7 @@ function openModal(id) {
   $("modalTitle").textContent = selected.title;
   $("modalPrompt").textContent = selected.prompt;
   $("modalCategory").textContent = selected.category;
-  $("modalImage").src = getPromptImage(selected);
+  $("modalImage").src = selected.image || "";
   $("modalImage").alt = selected.title;
   $("copyButton").textContent = "کپی پرامپت ✦";
   updateModalFavorite();
