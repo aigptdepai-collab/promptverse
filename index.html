@@ -1,1 +1,1241 @@
-PLACEHOLDER
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#090711">
+<meta name="description" content="Promptverse — کتابخانه حرفه‌ای پرامپت‌های هوش مصنوعی برای خلق تصاویر خیره‌کننده">
+<title>PROMPTVERSE | کتابخانه پرامپت هوش مصنوعی</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #07050f;
+  --surface: #0f0c1a;
+  --panel: #15111f;
+  --panel-hover: #1c1729;
+  --purple: #a855f7;
+  --purple-light: #c084fc;
+  --pink: #e879f9;
+  --text: #faf7ff;
+  --muted: #9b8fb0;
+  --border: rgba(255,255,255,0.08);
+  --gold: #f5d28a;
+  --radius: 18px;
+  --shadow: 0 20px 50px rgba(0,0,0,0.4);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Vazirmatn', system-ui, sans-serif;
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+button, input { font: inherit; border: none; outline: none; }
+button { cursor: pointer; background: none; color: inherit; }
+a { color: inherit; text-decoration: none; }
+img { max-width: 100%; display: block; }
+
+.container { width: min(1240px, 92%); margin: 0 auto; }
+
+/* Header */
+header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(7, 5, 15, 0.85);
+  backdrop-filter: blur(24px);
+  border-bottom: 1px solid var(--border);
+}
+.navbar {
+  height: 72px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+.logo {
+  font-size: 22px;
+  font-weight: 900;
+  letter-spacing: 0.5px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.logo span {
+  background: linear-gradient(100deg, #c084fc, #f0abfc);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.logo-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #9333ea, #c026d3);
+  display: grid;
+  place-items: center;
+  font-size: 16px;
+}
+nav {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+nav a {
+  font-size: 13px;
+  color: var(--muted);
+  padding: 8px 14px;
+  border-radius: 10px;
+  transition: all 0.2s;
+}
+nav a:hover {
+  color: var(--text);
+  background: rgba(168, 85, 247, 0.12);
+}
+.nav-cta {
+  padding: 10px 18px !important;
+  border-radius: 12px !important;
+  background: linear-gradient(120deg, #9333ea, #c026d3) !important;
+  color: white !important;
+  font-weight: 600;
+  font-size: 12px !important;
+  box-shadow: 0 4px 20px rgba(168, 85, 247, 0.3);
+}
+.nav-cta:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 25px rgba(168, 85, 247, 0.45);
+}
+
+/* Full-width cinematic rotating hero */
+.hero {
+  position: relative;
+  min-height: 590px;
+  padding: 92px 0 86px;
+  overflow: hidden;
+  isolation: isolate;
+  display: flex;
+  align-items: center;
+  background: #090711;
+}
+.hero-slides { position:absolute; inset:0; z-index:-2; overflow:hidden; }
+.hero-slide {
+  position:absolute; inset:0;
+  opacity:0;
+  transition:opacity 1.35s ease;
+}
+.hero-slide.active { opacity:1; }
+.hero-slide img {
+  width:100%; height:100%; object-fit:cover;
+  object-position:center 38%;
+  transform:scale(1.04);
+  transition:transform 7s ease;
+}
+.hero-slide.active img { transform:scale(1.12); }
+.hero-slides::after {
+  content:""; position:absolute; inset:0;
+  background:linear-gradient(90deg, rgba(8,5,15,.84) 0%, rgba(8,5,15,.62) 48%, rgba(8,5,15,.26) 100%),
+             linear-gradient(0deg, rgba(8,5,15,.58), transparent 45%);
+}
+.hero::before {
+  content:""; position:absolute; inset:0; z-index:-1; pointer-events:none;
+  background:radial-gradient(ellipse at 72% 35%, rgba(168,85,247,.22), transparent 48%);
+  animation:heroGlow 9s ease-in-out infinite alternate;
+}
+.hero-content {
+  position:relative; z-index:2; max-width:760px;
+  animation:heroRise .9s both;
+}
+.hero-dots {
+  display:flex; align-items:center; gap:9px;
+  margin-top:30px;
+}
+.hero-dot {
+  width:8px; height:8px; border-radius:20px;
+  background:rgba(255,255,255,.48);
+  transition:all .35s ease;
+}
+.hero-dot.active { width:28px; background:#e9c7ff; box-shadow:0 0 16px rgba(233,199,255,.65); }
+@keyframes heroRise { from {opacity:0;transform:translateY(22px)} to {opacity:1;transform:translateY(0)} }
+@keyframes heroGlow { from {opacity:.55;transform:scale(.96)} to {opacity:1;transform:scale(1.06)} }
+@media (prefers-reduced-motion: reduce) {
+  .hero-slide, .hero-slide img, .hero::before, .hero-content { animation:none !important; transition:none !important; }
+}
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  border-radius: 40px;
+  border: 1px solid rgba(189,117,250,0.3);
+  background: rgba(126,53,170,0.15);
+  color: #e7c4ff;
+  font-size: 12px;
+  font-weight: 500;
+  margin-bottom: 24px;
+}
+.hero h1 {
+  font-size: clamp(40px, 7vw, 72px);
+  font-weight: 900;
+  line-height: 1.25;
+  letter-spacing: -1.5px;
+  margin-bottom: 18px;
+}
+.hero h1 span {
+  background: linear-gradient(90deg, #c084fc, #f0abfc, #f7d4ff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.hero-desc {
+  color: #c5b8d4;
+  font-size: 15px;
+  line-height: 2;
+  max-width: 560px;
+  margin-bottom: 32px;
+}
+.search-wrap {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  max-width: 560px;
+}
+.search-box {
+  flex: 1;
+  min-width: 220px;
+  display: flex;
+  gap: 6px;
+  padding: 6px;
+  border-radius: 16px;
+  background: rgba(23, 18, 34, 0.9);
+  border: 1px solid rgba(255,255,255,0.1);
+  box-shadow: 0 12px 40px rgba(0,0,0,0.3);
+}
+.search-box input {
+  flex: 1;
+  min-width: 0;
+  background: transparent;
+  color: white;
+  padding: 12px 14px;
+  font-size: 13px;
+}
+.search-box input::placeholder { color: #7a6f8c; }
+.search-box button,
+.btn-primary {
+  border-radius: 12px;
+  padding: 12px 20px;
+  color: white;
+  background: linear-gradient(120deg, #9333ea, #c026d3);
+  font-weight: 700;
+  font-size: 13px;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+.search-box button:hover,
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(168,85,247,0.4);
+}
+.btn-secondary {
+  border-radius: 12px;
+  padding: 12px 18px;
+  background: rgba(168,85,247,0.12);
+  border: 1px solid rgba(168,85,247,0.3);
+  color: #e5c5ff;
+  font-size: 13px;
+  font-weight: 600;
+  transition: all 0.2s;
+}
+.btn-secondary:hover {
+  background: rgba(168,85,247,0.22);
+  transform: translateY(-1px);
+}
+
+/* Stats */
+.stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+  margin-top: -30px;
+  position: relative;
+  z-index: 5;
+}
+.stat {
+  background: linear-gradient(145deg, #1a1428, #100d1a);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px 16px;
+  text-align: center;
+  transition: transform 0.2s;
+}
+.stat:hover { transform: translateY(-3px); }
+.stat strong {
+  display: block;
+  font-size: 26px;
+  font-weight: 800;
+  color: #e0b6ff;
+  margin-bottom: 4px;
+}
+.stat span {
+  font-size: 11px;
+  color: var(--muted);
+}
+
+/* Sections */
+main { padding: 70px 0 40px; }
+.section { margin-bottom: 70px; }
+.section-head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 28px;
+  flex-wrap: wrap;
+}
+.section-kicker {
+  color: #c78af7;
+  font-size: 11px;
+  letter-spacing: 2px;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+.section-title {
+  font-size: 26px;
+  font-weight: 800;
+}
+.section-subtitle {
+  color: var(--muted);
+  font-size: 13px;
+  margin-top: 6px;
+}
+
+/* Categories */
+.categories {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+  gap: 14px;
+}
+.category-card {
+  min-height: 120px;
+  padding: 20px;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  background: linear-gradient(160deg, #1a1428, #110e1c);
+  text-align: right;
+  transition: all 0.25s;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.category-card:hover {
+  transform: translateY(-5px);
+  border-color: rgba(183,107,244,0.45);
+  background: linear-gradient(160deg, #241a35, #16101f);
+  box-shadow: 0 12px 30px rgba(0,0,0,0.25);
+}
+.category-icon {
+  font-size: 24px;
+  margin-bottom: 12px;
+  opacity: 0.9;
+}
+.category-card strong {
+  font-size: 14px;
+  font-weight: 700;
+}
+.category-card small {
+  display: block;
+  color: var(--muted);
+  font-size: 11px;
+  margin-top: 6px;
+}
+
+/* Featured */
+.featured-wrap {
+  padding: 28px;
+  border-radius: 24px;
+  border: 1px solid rgba(168,85,247,0.2);
+  background:
+    radial-gradient(ellipse at 15% 0%, rgba(139,54,187,0.15), transparent 55%),
+    linear-gradient(160deg, #15111f, #0e0b16);
+}
+
+/* Filters */
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 24px;
+  position: sticky;
+  top: 72px;
+  z-index: 40;
+  padding: 12px 0;
+  background: linear-gradient(to bottom, var(--bg) 60%, transparent);
+}
+.chip {
+  padding: 9px 16px;
+  border-radius: 40px;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  color: #d0c4de;
+  font-size: 12px;
+  font-weight: 500;
+  transition: all 0.2s;
+}
+.chip:hover {
+  border-color: rgba(168,85,247,0.4);
+  color: white;
+}
+.chip.active {
+  background: linear-gradient(120deg, #7e22ce, #a21caf);
+  border-color: transparent;
+  color: white;
+  box-shadow: 0 4px 15px rgba(168,85,247,0.3);
+}
+
+/* Grid & Cards */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 18px;
+}
+.card {
+  position: relative;
+  border-radius: 22px;
+  background: linear-gradient(155deg, rgba(34,24,48,.98), rgba(15,12,26,.98));
+  border: 1px solid rgba(216,180,254,.12);
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform .45s cubic-bezier(.22,1,.36,1), border-color .35s, box-shadow .45s;
+  animation: fadeUp .55s ease both;
+  box-shadow: 0 12px 32px rgba(0,0,0,.2);
+}
+.card::before {
+  content:""; position:absolute; inset:0 12% auto; height:1px; z-index:3;
+  background:linear-gradient(90deg,transparent,rgba(232,190,255,.65),transparent);
+  opacity:.35; transition:opacity .35s;
+}
+.card:hover {
+  transform:translateY(-9px);
+  border-color:rgba(192,132,252,.48);
+  box-shadow:0 24px 52px rgba(0,0,0,.38), 0 0 28px rgba(168,85,247,.12);
+}
+.card:hover::before { opacity:1; }
+.card-image {
+  height:260px;
+  position:relative;
+  overflow:hidden;
+  background:#1a1428;
+}
+.card-image img {
+  width:100%; height:100%; object-fit:cover;
+  transition:transform .85s cubic-bezier(.22,1,.36,1), filter .6s;
+  filter:saturate(.88);
+}
+.card:hover .card-image img { transform:scale(1.09); filter:saturate(1.08); }
+.card-image::after {
+  content:""; position:absolute; inset:35% 0 0;
+  background:linear-gradient(180deg,transparent,rgba(9,7,17,.58));
+  pointer-events:none;
+}
+.card-info { padding:17px 17px 18px; }
+.card-info h3 {
+  font-size:14px; font-weight:800; margin-bottom:12px; line-height:1.65;
+  display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden;
+  transition:color .25s;
+}
+.card:hover .card-info h3 { color:#f0d9ff; }
+.card-meta {
+  display:flex; align-items:center; justify-content:space-between; gap:8px;
+  font-size:11px; color:#b5a5c7;
+}
+.card-category {
+  background:linear-gradient(120deg,rgba(168,85,247,.2),rgba(232,121,249,.1));
+  color:#e4c7ff; border:1px solid rgba(216,180,254,.2);
+  border-radius:30px; padding:5px 11px; font-weight:600;
+}
+
+.heart {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  z-index: 5;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: rgba(9,7,17,0.7);
+  border: 1px solid rgba(255,255,255,0.15);
+  color: white;
+  font-size: 18px;
+  display: grid;
+  place-items: center;
+  transition: all 0.2s;
+  backdrop-filter: blur(8px);
+}
+.heart:hover { background: rgba(9,7,17,0.9); transform: scale(1.08); }
+.heart.saved { color: #ff70b5; }
+.featured-badge {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 4;
+  padding: 5px 11px;
+  border-radius: 20px;
+  background: linear-gradient(120deg, #e9b85b, #f0c96a);
+  color: #1a1205;
+  font-size: 10px;
+  font-weight: 800;
+}
+
+/* Skeleton */
+.skeleton {
+  background: linear-gradient(90deg, #15111f 25%, #1e1830 50%, #15111f 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.4s infinite;
+  border-radius: var(--radius);
+}
+.skeleton-card { height: 320px; }
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Empty */
+.empty {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 50px 20px;
+  color: var(--muted);
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  font-size: 14px;
+}
+
+/* Modal */
+.modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  background: rgba(0,0,0,0.75);
+  backdrop-filter: blur(10px);
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  opacity: 0;
+  transition: opacity 0.25s;
+}
+.modal.show {
+  display: flex;
+  opacity: 1;
+}
+.modal-box {
+  width: min(640px, 100%);
+  max-height: 92vh;
+  overflow-y: auto;
+  background: #15111f;
+  border: 1px solid rgba(168,85,247,0.35);
+  border-radius: 24px;
+  box-shadow: 0 30px 80px rgba(0,0,0,0.6);
+  padding: 0;
+  transform: translateY(20px);
+  transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.modal.show .modal-box { transform: translateY(0); }
+.modal-image-wrap {
+  position: relative;
+  height: 280px;
+  background: #0d0a15;
+  overflow: hidden;
+  border-radius: 24px 24px 0 0;
+}
+.modal-image-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.modal-close {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  width: 38px;
+  height: 38px;
+  border-radius: 12px;
+  background: rgba(0,0,0,0.55);
+  border: 1px solid rgba(255,255,255,0.15);
+  color: white;
+  font-size: 22px;
+  display: grid;
+  place-items: center;
+  z-index: 5;
+  backdrop-filter: blur(8px);
+  transition: background 0.2s;
+}
+.modal-close:hover { background: rgba(0,0,0,0.8); }
+.modal-body { padding: 24px; }
+.modal-body h2 {
+  font-size: 20px;
+  font-weight: 800;
+  margin-bottom: 6px;
+}
+.modal-cat {
+  color: var(--muted);
+  font-size: 13px;
+  margin-bottom: 18px;
+}
+.modal-prompt {
+  background: #0c0a14;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 16px;
+  font-size: 13px;
+  line-height: 2;
+  color: #e0d5eb;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  max-height: 200px;
+  overflow-y: auto;
+  margin-bottom: 20px;
+}
+.modal-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.modal-actions button { flex: 1; min-width: 120px; }
+
+/* Toast */
+.toast {
+  position: fixed;
+  bottom: 28px;
+  left: 50%;
+  transform: translateX(-50%) translateY(80px);
+  background: #1a1428;
+  border: 1px solid rgba(168,85,247,0.4);
+  color: white;
+  padding: 12px 22px;
+  border-radius: 14px;
+  font-size: 13px;
+  font-weight: 600;
+  z-index: 300;
+  opacity: 0;
+  transition: all 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+  box-shadow: 0 12px 40px rgba(0,0,0,0.4);
+  pointer-events: none;
+}
+.toast.show {
+  transform: translateX(-50%) translateY(0);
+  opacity: 1;
+}
+
+/* Footer */
+footer {
+  border-top: 1px solid var(--border);
+  padding: 48px 0 36px;
+  text-align: center;
+  background: #06040c;
+}
+footer .logo { justify-content: center; margin-bottom: 10px; }
+footer p {
+  font-size: 13px;
+  color: var(--muted);
+  margin-bottom: 8px;
+}
+.footer-note {
+  font-size: 11px;
+  color: #5c5368;
+  margin-top: 18px;
+}
+
+/* Back to top */
+.back-top {
+  position: fixed;
+  bottom: 28px;
+  left: 28px;
+  width: 44px;
+  height: 44px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #9333ea, #c026d3);
+  color: white;
+  font-size: 18px;
+  display: grid;
+  place-items: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.3s;
+  z-index: 50;
+  box-shadow: 0 6px 20px rgba(168,85,247,0.35);
+}
+.back-top.show {
+  opacity: 1;
+  pointer-events: auto;
+}
+.back-top:hover { transform: translateY(-3px); }
+
+/* Responsive */
+@media (max-width: 1000px) {
+  .grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+@media (max-width: 700px) {
+  .navbar { height: 64px; }
+  .logo { font-size: 18px; }
+  nav a:not(.nav-cta) { display: none; }
+  .hero { min-height: 590px; padding: 72px 0 64px; }
+  .hero-content { max-width: 100%; }
+  .hero h1 { letter-spacing: -1px; }
+  .stats { gap: 10px; }
+  .stat { padding: 14px 8px; }
+  .stat strong { font-size: 20px; }
+  .section-title { font-size: 22px; }
+  .categories { grid-template-columns: repeat(2, 1fr); }
+  .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+  .card-image { height: 200px; }
+  .featured-wrap { padding: 16px; }
+  .filters { top: 64px; }
+  .modal-image-wrap { height: 220px; }
+  .back-top { left: 16px; bottom: 16px; }
+}
+@media (max-width: 400px) {
+  .card-image { height: 170px; }
+  .search-box button { padding: 10px 14px; }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="container navbar">
+    <a class="logo" href="#">
+      <span class="logo-icon">✦</span>
+      PROMPT<span>VERSE</span>
+    </a>
+    <nav>
+      <a href="#categories">دسته‌بندی‌ها</a>
+      <a href="#featured">ویژه‌ها</a>
+      <a href="#gallery">گالری</a>
+      <a class="nav-cta" href="#gallery">کشف پرامپت‌ها</a>
+    </nav>
+  </div>
+</header>
+
+<section class="hero" aria-label="معرفی Promptverse">
+  <div class="hero-slides" aria-hidden="true">
+    <div class="hero-slide active"><img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=1800&q=88" alt="" fetchpriority="high"></div>
+    <div class="hero-slide"><img src="https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=1800&q=88" alt=""></div>
+    <div class="hero-slide"><img src="https://images.unsplash.com/photo-1483985988355-763728e1935b?w=1800&q=88" alt=""></div>
+  </div>
+  <div class="container">
+    <div class="hero-content">
+      <div class="eyebrow">✦ کتابخانه حرفه‌ای پرامپت هوش مصنوعی</div>
+      <h1>ایده‌هایت را<br><span>به تصویر تبدیل کن</span></h1>
+      <p class="hero-desc">
+        مجموعه‌ای از پرامپت‌های آماده و حرفه‌ای برای ساخت تصاویر شگفت‌انگیز با ابزارهای هوش مصنوعی.
+        جستجو کن، الهام بگیر و با یک کلیک کپی کن.
+      </p>
+      <div class="search-wrap">
+        <div class="search-box">
+          <input id="search" type="search" placeholder="جستجو در پرامپت‌ها..." autocomplete="off">
+          <button id="searchButton">جستجو</button>
+        </div>
+        <button class="btn-secondary" id="randomBtn">🎲 تصادفی</button>
+      </div>
+      <div class="hero-dots">
+        <button class="hero-dot active" aria-label="اسلاید ۱"></button>
+        <button class="hero-dot" aria-label="اسلاید ۲"></button>
+        <button class="hero-dot" aria-label="اسلاید ۳"></button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="container">
+  <div class="stats">
+    <div class="stat">
+      <strong id="promptTotal">—</strong>
+      <span>پرامپت آماده</span>
+    </div>
+    <div class="stat">
+      <strong id="categoryTotal">—</strong>
+      <span>دسته‌بندی</span>
+    </div>
+    <div class="stat">
+      <strong id="favTotal">۰</strong>
+      <span>علاقه‌مندی‌ها</span>
+    </div>
+  </div>
+</div>
+
+<main class="container">
+
+  <section class="section" id="categories">
+    <div class="section-head">
+      <div>
+        <div class="section-kicker">COLLECTIONS</div>
+        <h2 class="section-title">دسته‌بندی‌ها</h2>
+        <p class="section-subtitle">سبک مورد علاقه‌ات را انتخاب کن و شروع کن.</p>
+      </div>
+    </div>
+    <div class="categories" id="categoryCards">
+      <div class="skeleton skeleton-card" style="height:120px"></div>
+      <div class="skeleton skeleton-card" style="height:120px"></div>
+      <div class="skeleton skeleton-card" style="height:120px"></div>
+      <div class="skeleton skeleton-card" style="height:120px"></div>
+    </div>
+  </section>
+
+  <section class="section" id="featured">
+    <div class="featured-wrap">
+      <div class="section-head">
+        <div>
+          <div class="section-kicker">EDITOR'S PICK</div>
+          <h2 class="section-title">پرامپت‌های ویژه ✦</h2>
+          <p class="section-subtitle">منتخب‌هایی برای شروع یک خلق متفاوت.</p>
+        </div>
+      </div>
+      <div class="grid" id="featuredGrid">
+        <div class="skeleton skeleton-card"></div>
+        <div class="skeleton skeleton-card"></div>
+        <div class="skeleton skeleton-card"></div>
+        <div class="skeleton skeleton-card"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="gallery">
+    <div class="section-head">
+      <div>
+        <div class="section-kicker">LIBRARY</div>
+        <h2 class="section-title">گالری پرامپت‌ها</h2>
+        <p class="section-subtitle">روی هر کارت کلیک کن تا پرامپت را ببینی و کپی کنی.</p>
+      </div>
+      <span id="count" style="color:#d2a0ff;font-size:13px;font-weight:600"></span>
+    </div>
+
+    <div class="filters" id="filters"></div>
+    <div class="grid" id="grid">
+      <div class="skeleton skeleton-card"></div>
+      <div class="skeleton skeleton-card"></div>
+      <div class="skeleton skeleton-card"></div>
+      <div class="skeleton skeleton-card"></div>
+      <div class="skeleton skeleton-card"></div>
+      <div class="skeleton skeleton-card"></div>
+      <div class="skeleton skeleton-card"></div>
+      <div class="skeleton skeleton-card"></div>
+    </div>
+  </section>
+
+</main>
+
+<div class="modal" id="modal" role="dialog" aria-modal="true">
+  <div class="modal-box">
+    <div class="modal-image-wrap">
+      <img id="modalImage" alt="">
+      <button class="modal-close" id="closeModal" aria-label="بستن">×</button>
+    </div>
+    <div class="modal-body">
+      <h2 id="modalTitle"></h2>
+      <p class="modal-cat" id="modalCategory"></p>
+      <div class="modal-prompt" id="modalPrompt"></div>
+      <div class="modal-actions">
+        <button class="btn-primary" id="copyButton">کپی پرامپت ✦</button>
+        <button class="btn-secondary" id="modalFavorite">♡ علاقه‌مندی</button>
+        <button class="btn-secondary" id="shareButton">↗ اشتراک</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+<button class="back-top" id="backTop" aria-label="بازگشت به بالا">↑</button>
+
+<footer>
+  <div class="container">
+    <div class="logo" style="justify-content:center">
+      <span class="logo-icon">✦</span>
+      PROMPT<span>VERSE</span>
+    </div>
+    <p>جایی برای تبدیل تخیل به واقعیت</p>
+    <div class="footer-note">© 2026 PROMPTVERSE — ساخته‌شده با عشق برای خالقان</div>
+  </div>
+</footer>
+
+<script>
+const API_BASE = "https://promptverse-admin.aigptdepai.workers.dev";
+
+let items = [];
+let categories = [];
+let active = "همه";
+let selected = null;
+
+let favorites = [];
+try {
+  favorites = JSON.parse(localStorage.getItem("pv-favorites") || "[]");
+  if (!Array.isArray(favorites)) favorites = [];
+} catch { favorites = []; }
+favorites = favorites.map(String);
+
+const $ = id => document.getElementById(id);
+
+function escapeHTML(value) {
+  return String(value ?? "").replace(/[&<>"']/g, c =>
+    ({ "&":"&","<":"<",">":">",'"':""","'":"&#39;" }[c]));
+}
+
+function getFeatured(item) {
+  return Number(item.is_featured) === 1 || item.is_featured === true;
+}
+
+function getPromptImage(item) {
+  if (item.image && String(item.image).trim()) return item.image;
+
+  const cat = String(item.category || "").trim();
+
+  const byCategory = {
+    "کاپلی": [
+      "https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?w=900&q=85",
+      "https://images.unsplash.com/photo-1529333166437-7750a6dd5a70?w=900&q=85",
+      "https://images.unsplash.com/photo-1518199266791-5375a83190b7?w=900&q=85",
+      "https://images.unsplash.com/photo-1522673607200-164d1b6ce486?w=900&q=85",
+      "https://images.unsplash.com/photo-1494774157365-9e04c192da80?w=900&q=85"
+    ],
+    "چهره و پرتره": [
+      "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=900&q=85",
+      "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=900&q=85",
+      "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=900&q=85",
+      "https://images.unsplash.com/photo-1488426862026-3ee34a7d66df?w=900&q=85"
+    ],
+    "استایل و لباس": [
+      "https://images.unsplash.com/photo-1483985988355-763728e1935b?w=900&q=85",
+      "https://images.unsplash.com/photo-1539109136881-3be0616acf4b?w=900&q=85",
+      "https://images.unsplash.com/photo-1529139574466-a303027c1d8b?w=900&q=85",
+      "https://images.unsplash.com/photo-1566174053879-31528523f8ae?w=900&q=85"
+    ],
+    "هنری و فانتزی": [
+      "https://images.unsplash.com/photo-1534796636912-3b95b3ab5986?w=900&q=85",
+      "https://images.unsplash.com/photo-1448375240586-882707db888b?w=900&q=85",
+      "https://images.unsplash.com/photo-1499002238440-d264edd596ec?w=900&q=85",
+      "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=900&q=85"
+    ]
+  };
+
+  const key = Object.keys(byCategory).find(k => cat.includes(k) || k.includes(cat)) || cat;
+  const pool = byCategory[key] || byCategory["چهره و پرتره"];
+  const idNum = Number(item.id) || 0;
+  return pool[idNum % pool.length];
+}
+
+function saveFavorites() {
+  try {
+    localStorage.setItem("pv-favorites", JSON.stringify(favorites));
+  } catch {}
+  $("favTotal").textContent = favorites.length.toLocaleString("fa-IR");
+}
+
+function showToast(msg) {
+  const t = $("toast");
+  t.textContent = msg;
+  t.classList.add("show");
+  clearTimeout(t._timer);
+  t._timer = setTimeout(() => t.classList.remove("show"), 2200);
+}
+
+function renderCategoryCards() {
+  const icons = ["✧","◈","✦","❋","◇","✺","☼","✳","⬡","❄"];
+  if (!categories.length) {
+    $("categoryCards").innerHTML = '<div class="empty">هنوز دسته‌بندی‌ای ثبت نشده.</div>';
+    return;
+  }
+  $("categoryCards").innerHTML = categories.map((cat, i) => {
+    const count = items.filter(x => x.category === cat).length;
+    return `
+      <button class="category-card" data-category="${escapeHTML(cat)}">
+        <span class="category-icon">${icons[i % icons.length]}</span>
+        <div>
+          <strong>${escapeHTML(cat)}</strong>
+          <small>${count} پرامپت · مشاهده ←</small>
+        </div>
+      </button>`;
+  }).join("");
+}
+
+function renderFilters() {
+  const all = ["همه", ...categories, "علاقه‌مندی‌ها"];
+  $("filters").innerHTML = all.map(cat => `
+    <button class="chip ${active === cat ? "active" : ""}" data-filter="${escapeHTML(cat)}">
+      ${escapeHTML(cat)}
+    </button>`).join("");
+}
+
+function cardHTML(item, index = 0) {
+  const saved = favorites.includes(String(item.id));
+  const featured = getFeatured(item);
+  return `
+    <article class="card" data-open="${escapeHTML(item.id)}" style="animation-delay:${index * 40}ms">
+      <div class="card-image">
+        ${featured ? '<span class="featured-badge">✦ ویژه</span>' : ""}
+        <button class="heart ${saved ? "saved" : ""}" data-favorite="${escapeHTML(item.id)}" aria-label="علاقه‌مندی">
+          ${saved ? "♥" : "♡"}
+        </button>
+        <img src="${escapeHTML(getPromptImage(item))}" alt="${escapeHTML(item.title)}" loading="lazy"
+             onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22400%22 height=%22300%22%3E%3Crect fill=%22%231a1428%22 width=%22400%22 height=%22300%22/%3E%3Ctext fill=%22%239b8fb0%22 x=%2250%25%22 y=%2250%25%22 text-anchor=%22middle%22 dy=%22.3em%22 font-family=%22sans-serif%22 font-size=%2214%22%3Eبدون تصویر%3C/text%3E%3C/svg%3E'">
+      </div>
+      <div class="card-info">
+        <h3>${escapeHTML(item.title)}</h3>
+        <div class="card-meta">
+          <span class="card-category">${escapeHTML(item.category)}</span>
+          <span>مشاهده ←</span>
+        </div>
+      </div>
+    </article>`;
+}
+
+function renderFeatured() {
+  const featured = items.filter(getFeatured);
+  $("featuredGrid").innerHTML = featured.length
+    ? featured.map((item, i) => cardHTML(item, i)).join("")
+    : '<div class="empty">هنوز پرامپت ویژه‌ای انتخاب نشده.</div>';
+}
+
+function render() {
+  const query = $("search").value.trim().toLowerCase();
+  const list = items.filter(item => {
+    const catOk = active === "همه" ||
+      item.category === active ||
+      (active === "علاقه‌مندی‌ها" && favorites.includes(String(item.id)));
+    const searchOk = !query ||
+      item.title.toLowerCase().includes(query) ||
+      item.category.toLowerCase().includes(query) ||
+      item.prompt.toLowerCase().includes(query);
+    return catOk && searchOk;
+  });
+  $("count").textContent = list.length + " پرامپت";
+  $("grid").innerHTML = list.length
+    ? list.map((item, i) => cardHTML(item, i)).join("")
+    : '<div class="empty">موردی پیدا نشد. عبارت دیگری امتحان کن.</div>';
+}
+
+function setCategory(cat) {
+  active = cat;
+  renderFilters();
+  render();
+  $("gallery").scrollIntoView({ behavior: "smooth", block: "start" });
+}
+
+function toggleFavorite(id) {
+  id = String(id);
+  if (favorites.includes(id)) {
+    favorites = favorites.filter(x => x !== id);
+    showToast("از علاقه‌مندی‌ها حذف شد");
+  } else {
+    favorites.push(id);
+    showToast("به علاقه‌مندی‌ها اضافه شد ♥");
+  }
+  saveFavorites();
+  renderFilters();
+  render();
+  renderFeatured();
+  if (selected && String(selected.id) === id) updateModalFavorite();
+}
+
+function openModal(id) {
+  selected = items.find(x => String(x.id) === String(id));
+  if (!selected) return;
+  $("modalTitle").textContent = selected.title;
+  $("modalPrompt").textContent = selected.prompt;
+  $("modalCategory").textContent = selected.category;
+  $("modalImage").src = getPromptImage(selected);
+  $("modalImage").alt = selected.title;
+  $("copyButton").textContent = "کپی پرامپت ✦";
+  updateModalFavorite();
+  $("modal").classList.add("show");
+  document.body.style.overflow = "hidden";
+}
+
+function updateModalFavorite() {
+  if (!selected) return;
+  const saved = favorites.includes(String(selected.id));
+  $("modalFavorite").textContent = saved ? "♥ ذخیره شده" : "♡ علاقه‌مندی";
+}
+
+function closeModal() {
+  $("modal").classList.remove("show");
+  document.body.style.overflow = "";
+  selected = null;
+}
+
+async function copyPrompt() {
+  if (!selected) return;
+  try {
+    await navigator.clipboard.writeText(selected.prompt);
+    $("copyButton").textContent = "کپی شد ✓";
+    showToast("پرامپت کپی شد");
+  } catch {
+    const ta = document.createElement("textarea");
+    ta.value = selected.prompt;
+    document.body.appendChild(ta);
+    ta.select();
+    try {
+      document.execCommand("copy");
+      $("copyButton").textContent = "کپی شد ✓";
+      showToast("پرامپت کپی شد");
+    } catch {
+      $("copyButton").textContent = "کپی نشد";
+      showToast("کپی خودکار ممکن نشد");
+    }
+    ta.remove();
+  }
+  setTimeout(() => { $("copyButton").textContent = "کپی پرامپت ✦"; }, 1800);
+}
+
+function sharePrompt() {
+  if (!selected) return;
+  const data = {
+    title: selected.title,
+    text: selected.prompt,
+    url: window.location.href
+  };
+  if (navigator.share) {
+    navigator.share(data).catch(() => {});
+  } else {
+    navigator.clipboard.writeText(selected.prompt).then(() => {
+      showToast("پرامپت کپی شد — می‌تونی اشتراک بذاری");
+    });
+  }
+}
+
+function openRandom() {
+  if (!items.length) return;
+  const item = items[Math.floor(Math.random() * items.length)];
+  openModal(item.id);
+}
+
+async function loadPublicData() {
+  try {
+    const [catRes, promptRes] = await Promise.all([
+      fetch(API_BASE + "/api/public/categories"),
+      fetch(API_BASE + "/api/public/prompts")
+    ]);
+    if (!catRes.ok || !promptRes.ok) throw new Error("fetch failed");
+
+    const catData = await catRes.json();
+    const promptData = await promptRes.json();
+
+    const catList = Array.isArray(catData) ? catData : (catData.categories || []);
+    const promptList = Array.isArray(promptData) ? promptData : (promptData.prompts || []);
+
+    categories = catList.map(c => c.name || c).filter(Boolean);
+
+    items = promptList.map(p => ({
+      id: p.id,
+      title: String(p.title || "بدون عنوان"),
+      category: String(p.category || "بدون دسته‌بندی"),
+      image: String(p.image || ""),
+      prompt: String(p.prompt || ""),
+      is_featured: p.is_featured
+    }));
+
+    $("promptTotal").textContent = items.length.toLocaleString("fa-IR");
+    $("categoryTotal").textContent = categories.length.toLocaleString("fa-IR");
+    saveFavorites();
+
+    renderCategoryCards();
+    renderFilters();
+    renderFeatured();
+    render();
+  } catch (err) {
+    console.error(err);
+    $("count").textContent = "خطا در دریافت";
+    $("grid").innerHTML = '<div class="empty">دریافت اطلاعات با مشکل مواجه شد. لطفاً بعداً دوباره تلاش کن.</div>';
+    $("featuredGrid").innerHTML = '<div class="empty">اطلاعات ویژه‌ها در دسترس نیست.</div>';
+    $("categoryCards").innerHTML = '<div class="empty">دسته‌بندی‌ها بارگذاری نشدند.</div>';
+  }
+}
+
+/* Events */
+$("filters").addEventListener("click", e => {
+  const btn = e.target.closest("[data-filter]");
+  if (btn) setCategory(btn.dataset.filter);
+});
+
+$("categoryCards").addEventListener("click", e => {
+  const btn = e.target.closest("[data-category]");
+  if (btn) setCategory(btn.dataset.category);
+});
+
+function handleCardClick(e) {
+  const favBtn = e.target.closest("[data-favorite]");
+  if (favBtn) {
+    e.stopPropagation();
+    toggleFavorite(favBtn.dataset.favorite);
+    return;
+  }
+  const card = e.target.closest("[data-open]");
+  if (card) openModal(card.dataset.open);
+}
+
+$("grid").addEventListener("click", handleCardClick);
+$("featuredGrid").addEventListener("click", handleCardClick);
+
+let searchTimer;
+$("search").addEventListener("input", () => {
+  clearTimeout(searchTimer);
+  searchTimer = setTimeout(render, 180);
+});
+$("searchButton").addEventListener("click", () => {
+  render();
+  $("gallery").scrollIntoView({ behavior: "smooth" });
+});
+
+$("randomBtn").addEventListener("click", openRandom);
+$("closeModal").addEventListener("click", closeModal);
+$("copyButton").addEventListener("click", copyPrompt);
+$("modalFavorite").addEventListener("click", () => {
+  if (selected) toggleFavorite(selected.id);
+});
+$("shareButton").addEventListener("click", sharePrompt);
+
+$("modal").addEventListener("click", e => {
+  if (e.target === $("modal")) closeModal();
+});
+document.addEventListener("keydown", e => {
+  if (e.key === "Escape") closeModal();
+});
+
+const backTop = $("backTop");
+window.addEventListener("scroll", () => {
+  backTop.classList.toggle("show", window.scrollY > 500);
+});
+backTop.addEventListener("click", () => {
+  window.scrollTo({ top: 0, behavior: "smooth" });
+});
+
+/* Hero image carousel */
+const heroSlides = Array.from(document.querySelectorAll(".hero-slide"));
+const heroDots = Array.from(document.querySelectorAll(".hero-dot"));
+let heroIndex = 0;
+let heroTimer;
+function showHeroSlide(nextIndex) {
+  heroIndex = nextIndex % heroSlides.length;
+  heroSlides.forEach((slide, index) => slide.classList.toggle("active", index === heroIndex));
+  heroDots.forEach((dot, index) => dot.classList.toggle("active", index === heroIndex));
+}
+function startHeroCarousel() {
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  heroTimer = window.setInterval(() => showHeroSlide(heroIndex + 1), 5000);
+}
+startHeroCarousel();
+
+/* Init */
+loadPublicData();
+</script>
+</body>
+</html>
