@@ -509,6 +509,53 @@ main { padding: 70px 0 40px; }
 }
 
 /* Empty */
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 28px;
+}
+.page-btn {
+  min-width: 40px;
+  height: 40px;
+  padding: 0 12px;
+  border-radius: 12px;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  color: #d0c4de;
+  font-size: 13px;
+  font-weight: 600;
+  transition: all .2s;
+}
+.page-btn:hover:not(:disabled) {
+  border-color: rgba(168,85,247,.5);
+  color: white;
+  background: var(--panel-hover);
+}
+.page-btn.active {
+  color: white;
+  border-color: transparent;
+  background: linear-gradient(120deg, #7e22ce, #a21caf);
+  box-shadow: 0 4px 15px rgba(168,85,247,.25);
+}
+.page-btn:disabled {
+  opacity: .35;
+  cursor: not-allowed;
+}
+.page-ellipsis {
+  color: var(--muted);
+  padding: 0 3px;
+}
+.pagination-info {
+  width: 100%;
+  text-align: center;
+  color: var(--muted);
+  font-size: 11px;
+  margin-top: 4px;
+}
+
 .empty {
   grid-column: 1 / -1;
   text-align: center;
@@ -831,6 +878,7 @@ footer p {
       <div class="skeleton skeleton-card"></div>
       <div class="skeleton skeleton-card"></div>
     </div>
+    <div class="pagination" id="pagination" aria-label="صفحه‌بندی پرامپت‌ها"></div>
   </section>
 
 </main>
@@ -875,6 +923,8 @@ let items = [];
 let categories = [];
 let active = "همه";
 let selected = null;
+const PAGE_SIZE = 20;
+let currentPage = 1;
 
 let favorites = [];
 try {
@@ -966,6 +1016,40 @@ function renderFeatured() {
     : '<div class="empty">هنوز پرامپت ویژه‌ای انتخاب نشده.</div>';
 }
 
+function renderPagination(totalPages, totalItems) {
+  const container = $("pagination");
+  if (totalPages <= 1) {
+    container.innerHTML = totalItems
+      ? '<div class="pagination-info">همه پرامپت‌ها در همین صفحه نمایش داده می‌شوند.</div>'
+      : "";
+    return;
+  }
+
+  const pages = new Set([1, totalPages]);
+  for (let page = Math.max(1, currentPage - 1); page <= Math.min(totalPages, currentPage + 1); page++) {
+    pages.add(page);
+  }
+
+  const orderedPages = [...pages].sort((a, b) => a - b);
+  let buttons = `
+    <button class="page-btn" data-page="${currentPage - 1}" ${currentPage === 1 ? "disabled" : ""}>قبلی</button>`;
+
+  let previous = 0;
+  orderedPages.forEach(page => {
+    if (previous && page - previous > 1) {
+      buttons += '<span class="page-ellipsis">…</span>';
+    }
+    buttons += `<button class="page-btn ${page === currentPage ? "active" : ""}"
+      data-page="${page}" ${page === currentPage ? 'aria-current="page"' : ""}>${page.toLocaleString("fa-IR")}</button>`;
+    previous = page;
+  });
+
+  buttons += `
+    <button class="page-btn" data-page="${currentPage + 1}" ${currentPage === totalPages ? "disabled" : ""}>بعدی</button>
+    <div class="pagination-info">صفحه ${currentPage.toLocaleString("fa-IR")} از ${totalPages.toLocaleString("fa-IR")} · ${totalItems.toLocaleString("fa-IR")} پرامپت</div>`;
+  container.innerHTML = buttons;
+}
+
 function render() {
   const query = $("search").value.trim().toLowerCase();
   const list = items.filter(item => {
@@ -978,14 +1062,23 @@ function render() {
       item.prompt.toLowerCase().includes(query);
     return catOk && searchOk;
   });
-  $("count").textContent = list.length + " پرامپت";
-  $("grid").innerHTML = list.length
-    ? list.map((item, i) => cardHTML(item, i)).join("")
+
+  const totalPages = Math.ceil(list.length / PAGE_SIZE);
+  currentPage = Math.max(1, Math.min(currentPage, totalPages || 1));
+  const start = (currentPage - 1) * PAGE_SIZE;
+  const visibleItems = list.slice(start, start + PAGE_SIZE);
+
+  $("count").textContent = list.length.toLocaleString("fa-IR") + " پرامپت";
+  $("grid").innerHTML = visibleItems.length
+    ? visibleItems.map((item, i) => cardHTML(item, i)).join("")
     : '<div class="empty">موردی پیدا نشد. عبارت دیگری امتحان کن.</div>';
+
+  renderPagination(totalPages, list.length);
 }
 
 function setCategory(cat) {
   active = cat;
+  currentPage = 1;
   renderFilters();
   render();
   $("gallery").scrollIntoView({ behavior: "smooth", block: "start" });
@@ -1146,12 +1239,24 @@ function handleCardClick(e) {
 $("grid").addEventListener("click", handleCardClick);
 $("featuredGrid").addEventListener("click", handleCardClick);
 
+$("pagination").addEventListener("click", e => {
+  const button = e.target.closest("[data-page]");
+  if (!button || button.disabled) return;
+  const nextPage = Number(button.dataset.page);
+  if (!Number.isInteger(nextPage) || nextPage < 1) return;
+  currentPage = nextPage;
+  render();
+  $("gallery").scrollIntoView({ behavior: "smooth", block: "start" });
+});
+
 let searchTimer;
 $("search").addEventListener("input", () => {
   clearTimeout(searchTimer);
+  currentPage = 1;
   searchTimer = setTimeout(render, 180);
 });
 $("searchButton").addEventListener("click", () => {
+  currentPage = 1;
   render();
   $("gallery").scrollIntoView({ behavior: "smooth" });
 });
